@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ф</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    font-family:'Segoe UI',Tahoma,sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#1a4d2e 0%,#2d5016 50%,#4a7c2e 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+.card{
+    background:rgba(255,255,255,0.97);
+    border-radius:24px;
+    padding:40px 32px;
+    max-width:400px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    border:3px solid #2d5016;
+    position:relative;
+}
+.leaf-top,.leaf-bottom{
+    position:absolute;
+    font-size:48px;
+    opacity:0.3;
+    pointer-events:none;
+}
+.leaf-top{top:10px;left:20px;transform:rotate(-30deg)}
+.leaf-bottom{bottom:10px;right:20px;transform:rotate(150deg)}
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin:0 auto 20px;
+    border:4px solid #4a7c2e;
+    background:linear-gradient(135deg,#2d5016,#4a7c2e);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:48px;
+    font-weight:bold;
+    object-fit:cover;
+    box-shadow:0 4px 16px rgba(45,80,22,0.3);
+}
+h2{
+    font-size:24px;
+    color:#1a4d2e;
+    margin-bottom:8px;
+    line-height:1.3;
+    font-weight:600;
+}
+.id{
+    color:#4a7c2e;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:24px;
+    padding:6px 16px;
+    background:rgba(74,124,46,0.1);
+    border-radius:20px;
+    display:inline-block;
+}
+.info{
+    text-align:left;
+    margin-top:20px;
+}
+.info-item{
+    padding:16px 0;
+    border-bottom:2px solid rgba(74,124,46,0.2);
+}
+.info-item:last-child{
+    border-bottom:none;
+}
+.label{
+    color:#654321;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:600;
+    margin-bottom:6px;
+}
+.label::before{content:'🌿 '}
+.value{
+    color:#1a4d2e;
+    font-size:17px;
+    font-weight:500;
+    padding-left:20px;
+}
+.platforms-title{
+    color:#1a4d2e;
+    font-size:18px;
+    font-weight:bold;
+    margin:30px 0 15px;
+    text-align:left;
+}
+.platform-btn{
+    display:block;
+    width:100%;
+    padding:16px;
+    margin-bottom:12px;
+    background:linear-gradient(135deg,#2d5016,#4a7c2e);
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow:0 4px 15px rgba(45,80,22,0.4);
+    transition:all 0.2s;
+    font-family:inherit;
+    text-align:left;
+}
+.platform-btn:active{transform:scale(0.97)}
+.platform-btn:disabled{opacity:0.7;cursor:not-allowed}
+.platform-btn.done{background:linear-gradient(135deg,#4a7c2e,#6ba84e)}
+.platform-btn.error{background:linear-gradient(135deg,#8b0000,#cc0000)}
+.platform-name{
+    font-size:16px;
+    font-weight:600;
+    display:block;
+}
+.platform-status{
+    font-size:13px;
+    opacity:0.8;
+    margin-top:4px;
+    display:block;
+}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="leaf-top">🍃</div>
+<div class="leaf-bottom">🍃</div>
+<div class="avatar">Ф</div>
+<h2>Ф</h2>
+<div class="id">ID: 091CD</div>
+<div class="info">
+<div class="info-item">
+<div class="label">Команда</div>
+<div class="value">Ф</div>
+</div>
+</div>
+<div class="platforms-title">🎯 Мои площадки</div>
+
+        <button class="platform-btn" onclick="markPlatform('Гонка приключений \"Таёжный герой\"', this)">
+            <span class="platform-name">Гонка приключений Таёжный герой</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" onclick="markPlatform('Гигантский волейбол', this)">
+            <span class="platform-name">Гигантский волейбол</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" onclick="markPlatform('Арчеритаг', this)">
+            <span class="platform-name">Арчеритаг</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+</div>
+<script>
+function markPlatform(platform, btn) {
+    if (btn.disabled) return;
+
+    var status = btn.querySelector('.platform-status');
+    btn.disabled = true;
+    status.innerText = "⏳ Отправка...";
+
+    fetch("https://script.google.com/macros/s/AKfycbxPto2HA7r3GkmnAJK45aLVRZ1LSccAEc3FhakrXroveUBVoWlx6C1EyKcxR27hF_B6/exec?fio=" + encodeURIComponent("Ф") + 
+          "&team=" + encodeURIComponent("Ф") + 
+          "&platform=" + encodeURIComponent(platform))
+    .then(response => response.text())
+    .then(data => {
+        if (data.includes('Успех')) {
+            btn.classList.add('done');
+            status.innerText = "✅ " + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+        } else {
+            btn.classList.add('error');
+            status.innerText = "❌ " + data;
+            setTimeout(() => {
+                btn.classList.remove('error');
+                status.innerText = "Отметить участие";
+                btn.disabled = false;
+            }, 3000);
+        }
+    })
+    .catch(error => {
+        status.innerText = "❌ Ошибка сети";
+        setTimeout(() => {
+            status.innerText = "Отметить участие";
+            btn.disabled = false;
+        }, 3000);
+    });
+}
+</script>
+</body>
+</html>
