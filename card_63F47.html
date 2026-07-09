@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карточка участника</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;min-height:100vh;background:linear-gradient(135deg,#1a4d2e 0%,#2d5016 50%,#4a7c2e 100%);display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:rgba(255,255,255,0.97);border-radius:24px;padding:40px 32px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:3px solid #2d5016;position:relative}
+.leaf-top,.leaf-bottom{position:absolute;font-size:48px;opacity:0.3;pointer-events:none}
+.leaf-top{top:10px;left:20px;transform:rotate(-30deg)}
+.leaf-bottom{bottom:10px;right:20px;transform:rotate(150deg)}
+.avatar{width:120px;height:120px;border-radius:50%;margin:0 auto 20px;border:4px solid #4a7c2e;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:bold;object-fit:cover;box-shadow:0 4px 16px rgba(45,80,22,0.3)}
+h2{font-size:24px;color:#1a4d2e;margin-bottom:8px;line-height:1.3;font-weight:600}
+.id{color:#4a7c2e;font-size:14px;font-weight:600;margin-bottom:24px;padding:6px 16px;background:rgba(74,124,46,0.1);border-radius:20px;display:inline-block}
+.info{text-align:left;margin-top:20px}
+.info-item{padding:16px 0;border-bottom:2px solid rgba(74,124,46,0.2)}
+.info-item:last-child{border-bottom:none}
+.label{color:#654321;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px}
+.label::before{content:'🌿 '}
+.value{color:#1a4d2e;font-size:17px;font-weight:500;padding-left:20px}
+.platforms-title{color:#1a4d2e;font-size:18px;font-weight:bold;margin:30px 0 15px;text-align:left}
+.platform-btn{display:block;width:100%;padding:16px;margin-bottom:12px;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 4px 15px rgba(45,80,22,0.4);transition:all 0.2s;font-family:inherit;text-align:left}
+.platform-btn:active{transform:scale(0.97)}
+.platform-btn:disabled{opacity:0.7;cursor:not-allowed}
+.platform-btn.done{background:linear-gradient(135deg,#4a7c2e,#6ba84e)}
+.platform-btn.error{background:linear-gradient(135deg,#8b0000,#cc0000)}
+.platform-name{font-size:16px;font-weight:600;display:block}
+.platform-status{font-size:13px;opacity:0.8;margin-top:4px;display:block}
+
+/* Стили для экрана пароля */
+#password-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a4d2e 0%,#2d5016 50%,#4a7c2e 100%);display:flex;justify-content:center;align-items:center;z-index:1000;padding:20px}
+.password-box{background:rgba(255,255,255,0.97);border-radius:24px;padding:40px 32px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:3px solid #2d5016}
+.password-box h2{color:#1a4d2e;margin-bottom:20px;font-size:22px}
+.password-box p{color:#654321;margin-bottom:20px;font-size:14px}
+.password-input{width:100%;padding:16px;font-size:18px;border:2px solid #4a7c2e;border-radius:12px;margin-bottom:16px;text-align:center;font-family:inherit;box-sizing:border-box}
+.password-input:focus{outline:none;border-color:#2d5016;box-shadow:0 0 0 3px rgba(74,124,46,0.2)}
+.password-btn{width:100%;padding:16px;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;border:none;border-radius:12px;font-size:18px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(45,80,22,0.4);transition:all 0.2s;font-family:inherit}
+.password-btn:active{transform:scale(0.97)}
+.password-error{color:#cc0000;margin-top:12px;font-size:14px;font-weight:600;display:none}
+#main-content{display:none}
+</style>
+</head>
+<body>
+
+<!-- Экран пароля -->
+<div id="password-screen">
+<div class="password-box">
+<div style="font-size:48px;margin-bottom:16px">🔐</div>
+<h2>Защищённая карточка</h2>
+<p>Введите пароль для доступа к карточке участника</p>
+<input type="password" class="password-input" id="passwordInput" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')checkPassword()">
+<button class="password-btn" onclick="checkPassword()">Войти</button>
+<p class="password-error" id="passwordError">❌ Неверный пароль!</p>
+</div>
+</div>
+
+<!-- Основной контент -->
+<div id="main-content">
+<div class="card">
+<div class="leaf-top">🍃</div>
+<div class="leaf-bottom">🍃</div>
+<img class="avatar" src="data:image/jpeg;base64,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">
+<h2>СЕВА</h2>
+<div class="id">ID: 63F47</div>
+<div class="info">
+<div class="info-item">
+<div class="label">Команда</div>
+<div class="value">СЕВА</div>
+</div>
+</div>
+<div class="platforms-title">🎯 Мои площадки</div>
+
+        <button class="platform-btn" data-platform-index="0" onclick="markPlatform(0, this)">
+            <span class="platform-name">Гонка приключений «Таёжный герой»</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="1" onclick="markPlatform(1, this)">
+            <span class="platform-name">Росмолодёжь.Гранты</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="2" onclick="markPlatform(2, this)">
+            <span class="platform-name">Пейнтбол</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="3" onclick="markPlatform(3, this)">
+            <span class="platform-name">Гигантский волейбол</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="4" onclick="markPlatform(4, this)">
+            <span class="platform-name">Арчеритаг</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="5" onclick="markPlatform(5, this)">
+            <span class="platform-name">Образовательные площадки</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="6" onclick="markPlatform(6, this)">
+            <span class="platform-name">Экологический бивак</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="7" onclick="markPlatform(7, this)">
+            <span class="platform-name">Визитная Карточка</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="8" onclick="markPlatform(8, this)">
+            <span class="platform-name">Квартирник в лесу</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+        <button class="platform-btn" data-platform-index="9" onclick="markPlatform(9, this)">
+            <span class="platform-name">Экоренессанс</span>
+            <span class="platform-status">Отметить участие</span>
+        </button>
+        
+</div>
+</div>
+
+<script>
+var FIO = "СЕВА";
+var TEAM = "СЕВА";
+var PLATFORMS = ["Гонка приключений \"Таёжный герой\"", "Всероссийский конкурс молодежных проектов \"Росмолодёжь.Гранты\"", "Пентбол", "Гигантский волейбол", "Арчеритаг", "Образовательные площадки", "Конкурс \"Экологический бивак\"", "Конкурс \"Визитная Карточка\"", "Конкурс \"Квартирник в лесу\"", "Конкурс \"Экоренессанс\""];
+var PASSWORD = "ЯГЕЛЬ2026";
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9rMNxc09zlxFJlAEIioZXwQOqeVfH9HvIdJy2uM926ZdEdDwqmheX0TbLAEsc4ex9/exec";
+
+function checkPassword() {
+    var input = document.getElementById('passwordInput').value;
+    var error = document.getElementById('passwordError');
+
+    if (input === PASSWORD) {
+        document.getElementById('password-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+    } else {
+        error.style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('passwordInput').focus();
+        setTimeout(function() {
+            error.style.display = 'none';
+        }, 3000);
+    }
+}
+
+function markPlatform(platformIndex, btn) {
+    if (btn.disabled) return;
+
+    var platform = PLATFORMS[platformIndex];
+    var status = btn.querySelector('.platform-status');
+    btn.disabled = true;
+    status.innerText = "⏳ Отправка...";
+
+    var url = SCRIPT_URL + "?fio=" + encodeURIComponent(FIO) + 
+              "&team=" + encodeURIComponent(TEAM) + 
+              "&platform=" + encodeURIComponent(platform);
+
+    fetch(url)
+    .then(response => response.text())
+    .then(data => {
+        if (data.includes('Успех')) {
+            btn.classList.add('done');
+            status.innerText = "✅ " + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+        } else {
+            btn.classList.add('error');
+            status.innerText = "❌ " + data;
+            setTimeout(function() {
+                btn.classList.remove('error');
+                status.innerText = "Отметить участие";
+                btn.disabled = false;
+            }, 3000);
+        }
+    })
+    .catch(function(error) {
+        console.error('Error:', error);
+        status.innerText = "❌ Ошибка сети";
+        setTimeout(function() {
+            status.innerText = "Отметить участие";
+            btn.disabled = false;
+        }, 3000);
+    });
+}
+
+// Фокус на поле пароля при загрузке
+window.onload = function() {
+    document.getElementById('passwordInput').focus();
+}
+</script>
+</body>
+</html>
