@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карточка участника</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;min-height:100vh;background:linear-gradient(135deg,#1a4d2e 0%,#2d5016 50%,#4a7c2e 100%);display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:rgba(255,255,255,0.97);border-radius:24px;padding:40px 32px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:3px solid #2d5016;position:relative}
+.leaf-top,.leaf-bottom{position:absolute;font-size:48px;opacity:0.3;pointer-events:none}
+.leaf-top{top:10px;left:20px;transform:rotate(-30deg)}
+.leaf-bottom{bottom:10px;right:20px;transform:rotate(150deg)}
+.avatar{width:120px;height:120px;border-radius:50%;margin:0 auto 20px;border:4px solid #4a7c2e;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:bold;object-fit:cover;box-shadow:0 4px 16px rgba(45,80,22,0.3)}
+h2{font-size:24px;color:#1a4d2e;margin-bottom:8px;line-height:1.3;font-weight:600}
+.id{color:#4a7c2e;font-size:14px;font-weight:600;margin-bottom:24px;padding:6px 16px;background:rgba(74,124,46,0.1);border-radius:20px;display:inline-block}
+.info{text-align:left;margin-top:20px}
+.info-item{padding:16px 0;border-bottom:2px solid rgba(74,124,46,0.2)}
+.info-item:last-child{border-bottom:none}
+.label{color:#654321;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px}
+.label::before{content:'🌿 '}
+.value{color:#1a4d2e;font-size:17px;font-weight:500;padding-left:20px}
+.platforms-title{color:#1a4d2e;font-size:18px;font-weight:bold;margin:30px 0 15px;text-align:left}
+.platform-btn{display:block;width:100%;padding:16px;margin-bottom:12px;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 4px 15px rgba(45,80,22,0.4);transition:all 0.2s;font-family:inherit;text-align:left}
+.platform-btn:active{transform:scale(0.97)}
+.platform-btn:disabled{opacity:0.7;cursor:not-allowed}
+.platform-btn.done{background:linear-gradient(135deg,#4a7c2e,#6ba84e)}
+.platform-btn.already{background:linear-gradient(135deg,#888,#aaa)}
+.platform-btn.error{background:linear-gradient(135deg,#8b0000,#cc0000)}
+.platform-name{font-size:16px;font-weight:600;display:block}
+.platform-status{font-size:13px;opacity:0.8;margin-top:4px;display:block}
+
+#password-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a4d2e 0%,#2d5016 50%,#4a7c2e 100%);display:flex;justify-content:center;align-items:center;z-index:1000;padding:20px}
+.password-box{background:rgba(255,255,255,0.97);border-radius:24px;padding:40px 32px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:3px solid #2d5016}
+.password-box h2{color:#1a4d2e;margin-bottom:20px;font-size:22px}
+.password-box p{color:#654321;margin-bottom:20px;font-size:14px}
+.password-input{width:100%;padding:16px;font-size:18px;border:2px solid #4a7c2e;border-radius:12px;margin-bottom:16px;text-align:center;font-family:inherit;box-sizing:border-box}
+.password-input:focus{outline:none;border-color:#2d5016;box-shadow:0 0 0 3px rgba(74,124,46,0.2)}
+.password-btn{width:100%;padding:16px;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;border:none;border-radius:12px;font-size:18px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(45,80,22,0.4);transition:all 0.2s;font-family:inherit}
+.password-btn:active{transform:scale(0.97)}
+.password-error{color:#cc0000;margin-top:12px;font-size:14px;font-weight:600;display:none}
+#main-content{display:none}
+</style>
+</head>
+<body>
+
+<div id="password-screen">
+<div class="password-box">
+<div style="font-size:48px;margin-bottom:16px">🔐</div>
+<h2>Защищённая карточка</h2>
+<p>Введите пароль для доступа к карточке участника</p>
+<input type="password" class="password-input" id="passwordInput" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')checkPassword()">
+<button class="password-btn" onclick="checkPassword()">Войти</button>
+<p class="password-error" id="passwordError">❌ Неверный пароль!</p>
+</div>
+</div>
+
+<div id="main-content">
+<div class="card">
+<div class="leaf-top">🍃</div>
+<div class="leaf-bottom">🍃</div>
+<div class="avatar">И</div>
+<h2>Иванов Иван Иванович</h2>
+<div class="id">ID: 21D1D</div>
+<div class="info">
+<div class="info-item">
+<div class="label">Команда</div>
+<div class="value">Non stop</div>
+</div>
+</div>
+<div class="platforms-title">🎯 Мои площадки</div>
+
+        <button class="platform-btn" data-platform-index="0" onclick="markPlatform(0, this)" id="btn-0">
+            <span class="platform-name">Экологический бивак</span>
+            <span class="platform-status" id="status-0">Отметить участие</span>
+        </button>
+        
+</div>
+</div>
+
+<script>
+var FIO = "Иванов Иван Иванович";
+var TEAM = "Non stop";
+var PLATFORMS = ["Конкурс \"Экологический бивак\""];
+var PASSWORD = "ЯГЕЛЬ2026";
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJKsac3LgrALKLchfz9EtoZZjEoc4S8aDOCse2xuPludTAIK_vSBmVEDUpbF9ILW4A/exec";
+
+function checkPassword() {
+    var input = document.getElementById('passwordInput').value;
+    var error = document.getElementById('passwordError');
+    if (input === PASSWORD) {
+        document.getElementById('password-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        checkAllPlatformsStatus();
+    } else {
+        error.style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('passwordInput').focus();
+        setTimeout(function() { error.style.display = 'none'; }, 3000);
+    }
+}
+
+function checkAllPlatformsStatus() {
+    for (var i = 0; i < PLATFORMS.length; i++) {
+        checkPlatformStatus(i);
+    }
+}
+
+function checkPlatformStatus(platformIndex) {
+    var platform = PLATFORMS[platformIndex];
+    var btn = document.getElementById('btn-' + platformIndex);
+    var status = document.getElementById('status-' + platformIndex);
+    var url = SCRIPT_URL + "?action=check&fio=" + encodeURIComponent(FIO) + 
+              "&team=" + encodeURIComponent(TEAM) + 
+              "&platform=" + encodeURIComponent(platform);
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.alreadyMarked) {
+            btn.classList.add('already');
+            btn.classList.add('done');
+            btn.disabled = true;
+            status.innerHTML = "✅ Уже отмечен<br><small>" + data.statusValue + "</small>";
+        }
+    })
+    .catch(function(error) { console.error('Ошибка проверки:', error); });
+}
+
+function markPlatform(platformIndex, btn) {
+    if (btn.disabled) return;
+    var platform = PLATFORMS[platformIndex];
+    var status = document.getElementById('status-' + platformIndex);
+    btn.disabled = true;
+    status.innerText = "⏳ Отправка...";
+
+    var url = SCRIPT_URL + "?action=mark&fio=" + encodeURIComponent(FIO) + 
+              "&team=" + encodeURIComponent(TEAM) + 
+              "&platform=" + encodeURIComponent(platform);
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && !data.alreadyMarked) {
+            btn.classList.add('done');
+            status.innerHTML = "✅ " + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+        } else if (data.alreadyMarked) {
+            btn.classList.add('already');
+            btn.classList.add('done');
+            status.innerHTML = "✅ Уже отмечен<br><small>" + data.statusValue + "</small>";
+        } else {
+            btn.classList.add('error');
+            status.innerText = "❌ " + data.message;
+            setTimeout(function() {
+                btn.classList.remove('error');
+                status.innerText = "Отметить участие";
+                btn.disabled = false;
+            }, 3000);
+        }
+    })
+    .catch(function(error) {
+        status.innerText = "❌ Ошибка сети";
+        setTimeout(function() {
+            status.innerText = "Отметить участие";
+            btn.disabled = false;
+        }, 3000);
+    });
+}
+
+window.onload = function() {
+    document.getElementById('passwordInput').focus();
+}
+</script>
+</body>
+</html>
