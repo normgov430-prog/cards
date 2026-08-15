@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #222;
+            color: white;
+            font-family: sans-serif;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        h1 { font-size: 4rem; margin: 0 0 20px 0; }
+        
+        #clickBtn {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: none;
+            background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 -10px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.08s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent; /* Убирает синюю подсветку на мобильных */
+        }
+
+        #clickBtn:active {
+            transform: scale(0.93);
+        }
+
+        .float-text {
+            position: absolute;
+            font-weight: bold;
+            font-size: 2rem;
+            color: #fff;
+            pointer-events: none;
+            animation: fly 0.7s ease-out forwards;
+        }
+
+        @keyframes fly {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-120px) scale(1.3); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="score">0</h1>
+    <button id="clickBtn"></button>
+
+    <script>
+        const scoreEl = document.getElementById('score');
+        const btn = document.getElementById('clickBtn');
+        
+        // Инициализация счета
+        let count = Number(localStorage.getItem('myClickerScore')) || 0;
+        scoreEl.textContent = count;
+
+        // Звуковой движок
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            // Важно: возобновляем контекст при каждом клике, если он был приостановлен
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound() {
+            if (!audioCtx) return;
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            // Настройка звука "щелчка"
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function showFloat(x, y) {
+            const el = document.createElement('div');
+            el.className = 'float-text';
+            el.textContent = '+1';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 700);
+        }
+
+        // Обработчик клика (используем 'pointerdown' для мгновенной реакции)
+        btn.addEventListener('pointerdown', (e) => {
+            // 1. Инициализируем звук при первом взаимодействии
+            initAudio();
+            
+            // 2. Играем звук
+            playSound();
+
+            // 3. Считаем
+            count++;
+            scoreEl.textContent = count;
+            localStorage.setItem('myClickerScore', count);
+
+            // 4. Анимация
+            // Для touch-событий берем координаты из changedTouches, иначе e.clientX
+            let x = e.clientX;
+            let y = e.clientY;
+            if (e.type.includes('touch') && e.changedTouches.length > 0) {
+                x = e.changedTouches[0].clientX;
+                y = e.changedTouches[0].clientY;
+            }
+            // Если координат нет (клик с клавиатуры), берем центр кнопки
+            if (!x && !y) {
+                const rect = btn.getBoundingClientRect();
+                x = rect.left + rect.width / 2;
+                y = rect.top + rect.height / 2;
+            }
+            showFloat(x, y);
+        });
+    </script>
+</body>
+</html>
