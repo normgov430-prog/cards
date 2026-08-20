@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карточка организатора</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;min-height:100vh;background:linear-gradient(135deg,#1a4d2e,#2d5016,#4a7c2e);display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:#fff;border-radius:24px;padding:30px;max-width:400px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.3);border:3px solid #2d5016;text-align:center}
+.avatar{width:100px;height:100px;border-radius:50%;margin:0 auto 15px;border:4px solid #4a7c2e;background:#2d5016;color:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:bold;object-fit:cover}
+h2{color:#1a4d2e;margin-bottom:5px}.id{color:#4a7c2e;font-size:13px;margin-bottom:20px;background:rgba(74,124,46,0.1);padding:4px 12px;border-radius:15px;display:inline-block}
+.plat-card{margin-bottom:15px;text-align:left}
+.platform-btn{width:100%;padding:14px;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;border:none;border-radius:12px;cursor:pointer;font-family:inherit;text-align:left;font-weight:600}
+.platform-btn small{display:block;font-size:12px;opacity:0.8;margin-top:4px;font-weight:400}
+.platform-btn.done{background:#4a7c2e}.platform-btn.already{background:#888}
+.res-box{background:rgba(74,124,46,0.08);padding:10px;border-radius:0 0 12px 12px;margin-top:-5px}
+.res-inputs{display:flex;gap:5px;align-items:center;margin:8px 0}
+.res-inputs input,.edu-block select{padding:8px;border-radius:8px;border:2px solid #4a7c2e;font-family:inherit}
+.result-btn{width:100%;padding:8px;background:#654321;color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;margin-top:5px}
+.edu-block{margin-top:20px;padding-top:20px;border-top:2px dashed rgba(74,124,46,0.3)}
+.edu-label{color:#1a4d2e;font-weight:bold;margin-bottom:8px;text-align:left}
+#pwd-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a4d2e,#2d5016);display:flex;justify-content:center;align-items:center;z-index:999}
+.pwd-box{background:#fff;padding:30px;border-radius:24px;max-width:350px;width:90%;text-align:center}
+.pwd-box input{width:100%;padding:12px;margin:15px 0;border:2px solid #4a7c2e;border-radius:10px;text-align:center;font-size:18px}
+.pwd-box button{width:100%;padding:12px;background:#2d5016;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
+.err{color:red;font-size:13px;display:none}
+#main{display:none}
+</style>
+</head>
+<body>
+<div id="pwd-screen"><div class="pwd-box">
+<h2>🔐 Карточка организатора</h2>
+<input type="password" id="pwd-in" placeholder="Пароль" onkeypress="if(event.key==='Enter')chkPwd()">
+<button onclick="chkPwd()">Войти</button>
+<p class="err" id="pwd-err">❌ Неверный пароль!</p>
+</div></div>
+
+<div id="main"><div class="card">
+<div class="avatar">П</div>
+<h2>Панкратов  Алексей Владимирович</h2>
+<div class="id">ID: ПанкратовАВ_ДОРОЖНЫЕТИТАНЫ</div>
+
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(0, this)" id="btn-0">
+                <span>Гонка приключений «Таёжный герой»</span>
+                <small id="st-0">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-0">
+                <div class="res-inputs"><input type="number" id="min-0" placeholder="мин" style="width:60px"> мин <input type="number" id="sec-0" placeholder="сек" style="width:60px"> сек</div>
+                <button class="result-btn" onclick="saveRes(0)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(1, this)" id="btn-1">
+                <span>Пейнтбол</span>
+                <small id="st-1">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-1">
+                <select id="place-1" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(1)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(2, this)" id="btn-2">
+                <span>Гигантский волейбол</span>
+                <small id="st-2">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-2">
+                <select id="place-2" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(2)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(3, this)" id="btn-3">
+                <span>Арчеритаг</span>
+                <small id="st-3">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-3">
+                <select id="place-3" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(3)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(4, this)" id="btn-4">
+                <span>Экологический бивак</span>
+                <small id="st-4">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-4">
+                <select id="place-4" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(4)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(5, this)" id="btn-5">
+                <span>Визитная Карточка</span>
+                <small id="st-5">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-5">
+                <select id="place-5" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(5)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(6, this)" id="btn-6">
+                <span>Квартирник в лесу</span>
+                <small id="st-6">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-6">
+                <select id="place-6" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(6)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(7, this)" id="btn-7">
+                <span>Экоренессанс</span>
+                <small id="st-7">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-7">
+                <select id="place-7" style="width:100%;padding:8px;border-radius:8px;border:2px solid #4a7c2e;margin:8px 0;font-family:inherit;">
+                <option value="не призовое">не призовое</option>
+                <option value="1">🥇 1 место</option>
+                <option value="2">🥈 2 место</option>
+                <option value="3">🥉 3 место</option>
+            </select>
+                <button class="result-btn" onclick="saveRes(7)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+        <div class="plat-card">
+            <button class="platform-btn" onclick="markPlat(8, this)" id="btn-8">
+                <span>Гонка на байдарках</span>
+                <small id="st-8">Отметить участие</small>
+            </button>
+            <div class="res-box" id="res-8">
+                <div class="res-inputs"><input type="number" id="min-8" placeholder="мин" style="width:60px"> мин <input type="number" id="sec-8" placeholder="сек" style="width:60px"> сек</div>
+                <button class="result-btn" onclick="saveRes(8)">💾 Сохранить результат</button>
+            </div>
+        </div>
+        
+
+    <div class="edu-block">
+        <div class="edu-label">🎓 Образовательные площадки</div>
+        <select id="speaker-select" style="width:100%;padding:10px;border-radius:8px;border:2px solid #4a7c2e;margin-bottom:8px;font-family:inherit;">
+            <option value="">Выберите спикера...</option>
+            <option value="Ирина Грабельникова "НейроАтом: Энергия Жизни"">Ирина Грабельникова </option><option value="Инна Кононенко "Маяки добра"">Инна Кононенко </option><option value="Софья Няч "Сказки как путь взросления"">Софья Няч </option><option value="Анастасия Бабичева "Личная стратегическая сессия волонтёра"">Анастасия Бабичева </option><option value="Анастасия Родионова "Традиция как тренд"">Анастасия Родионова </option><option value="Валерий Дубиков "Нейросети - твой помощник"">Валерий Дубиков </option><option value="Илона Дилбарян "Лидерами не рождаются - ими становятся"">Илона Дилбарян </option><option value="Елизавета Денисова и Кристина Агапова "Успешные земляки"">Елизавета Денисова и Кристина Агапова </option><option value="Андрей Болдырев "Надёжная оборона. Отражаем атаки мошенников"">Андрей Болдырев </option><option value="Татьяна Шевяхова "Быт и традиции народов севера"">Татьяна Шевяхова </option><option value="Анна Климова "Успешные земляки"">Анна Климова </option><option value="Герман Бардин "Ямал: путь от традиционности к многонациональности"">Герман Бардин </option><option value="Ангелина Юрепина "Семья и семейные традиции"">Ангелина Юрепина </option><option value="Оксана Орлова-Горская "Личная экосистема. Как подобрать лучшие эко-привычки"">Оксана Орлова-Горская </option><option value="Сергей Музыкантов "Цифровая безопасность"">Сергей Музыкантов </option>
+        </select>
+        <button class="result-btn" onclick="markSpeaker()" style="width:100%">✅ Отметить посещение</button>
+        <div id="edu-status" style="margin-top:8px;font-size:13px;color:#1a4d2e;font-weight:600;"></div>
+    </div>
+    
+</div></div>
+
+<script>
+var FIO="Панкратов  Алексей Владимирович",TEAM="ДОРОЖНЫЕ ТИТАНЫ",PLATS=["Гонка приключений \"Таёжный герой\"", "Пейнтбол", "Гигантский волейбол", "Арчеритаг", "Конкурс \"Экологический бивак\"", "Конкурс \"Визитная Карточка\"", "Конкурс \"Квартирник в лесу\"", "Конкурс \"Экоренессанс\"", "Гонка на байдарках"],PWD="ЯГЕЛЬ2026",URL='https://script.google.com/macros/s/AKfycbxPcHg5bodDT85XCP1MR36v2O0HK8LRBJTqbXH3qNHolfTUNaVA-6EvYdfJXQ22sR9K/exec';
+
+function chkPwd(){
+    if(document.getElementById('pwd-in').value===PWD){
+        document.getElementById('pwd-screen').style.display='none';
+        document.getElementById('main').style.display='block';
+        checkAll();
+    }else{
+        var e=document.getElementById('pwd-err');e.style.display='block';
+        setTimeout(()=>e.style.display='none',3000);
+    }
+}
+
+function api(act,extra=''){
+    return fetch(URL+'?action='+act+'&fio='+encodeURIComponent(FIO)+'&team='+encodeURIComponent(TEAM)+extra)
+    .then(r=>r.json());
+}
+
+function checkAll(){
+    PLATS.forEach((_,i)=>api('check','&platform='+encodeURIComponent(PLATS[i])).then(d=>{
+        if(d.alreadyMarked){
+            var b=document.getElementById('btn-'+i);b.classList.add('already','done');b.disabled=true;
+            document.getElementById('st-'+i).innerText='✅ '+d.statusValue;
+        }
+        if(d.result){
+            document.getElementById('res-'+i).innerHTML='<div style="color:#1a4d2e;font-weight:bold">✅ '+d.result+'</div><small style="color:#888">Изменить в таблице</small>';
+        }
+    }));
+}
+
+function markPlat(i,btn){
+    if(btn.disabled)return;
+    btn.disabled=true;document.getElementById('st-'+i).innerText='⏳...';
+    api('mark','&platform='+encodeURIComponent(PLATS[i])).then(d=>{
+        if(d.success&&!d.alreadyMarked){btn.classList.add('done');document.getElementById('st-'+i).innerText='✅ Отмечено';}
+        else if(d.alreadyMarked){btn.classList.add('already','done');document.getElementById('st-'+i).innerText='✅ '+d.statusValue;}
+        else{btn.disabled=false;document.getElementById('st-'+i).innerText='❌ '+d.message;}
+    });
+}
+
+function saveRes(i){
+    var p=PLATS[i],isTime=p.includes('Гонка');
+    var res=isTime?(document.getElementById('min-'+i).value+' мин '+document.getElementById('sec-'+i).value+' сек'):document.getElementById('place-'+i).value;
+    if(isTime&&(!document.getElementById('min-'+i).value||!document.getElementById('sec-'+i).value)){alert('Заполни оба поля!');return;}
+
+    var box=document.getElementById('res-'+i);
+    box.innerHTML='⏳ Сохранение...';
+    api('save_result','&platform='+encodeURIComponent(p)+'&result='+encodeURIComponent(res)).then(d=>{
+        if(d.success) box.innerHTML='<div style="color:#1a4d2e;font-weight:bold">✅ '+res+'</div><small style="color:#888">Изменить в таблице</small>';
+        else{box.innerHTML='<button class="result-btn" onclick="saveRes('+i+')">💾 Повторить</button>';alert(d.message);}
+    });
+}
+
+function markSpeaker(){
+    var sel=document.getElementById('speaker-select');
+    if(!sel.value)return alert('Выберите спикера!');
+    var spk='Спикер '+sel.value;
+    var st=document.getElementById('edu-status');
+    st.innerText='⏳ Отправка...';
+    api('mark','&platform='+encodeURIComponent(spk)).then(d=>{
+        if(d.success) st.innerHTML='✅ Посещено: '+sel.value.split('"')[0]+'<br><small>'+d.timestamp+'</small>';
+        else if(d.alreadyMarked) st.innerHTML='️ Эта лекция уже отмечена!<br><small>'+d.statusValue+'</small>';
+        else st.innerText='❌ '+d.message;
+    });
+}
+</script>
+</body>
+</html>

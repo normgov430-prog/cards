@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карточка организатора</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;min-height:100vh;background:linear-gradient(135deg,#1a4d2e,#2d5016,#4a7c2e);display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:#fff;border-radius:24px;padding:30px;max-width:400px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.3);border:3px solid #2d5016;text-align:center}
+.avatar{width:100px;height:100px;border-radius:50%;margin:0 auto 15px;border:4px solid #4a7c2e;background:#2d5016;color:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:bold;object-fit:cover}
+h2{color:#1a4d2e;margin-bottom:5px}.id{color:#4a7c2e;font-size:13px;margin-bottom:20px;background:rgba(74,124,46,0.1);padding:4px 12px;border-radius:15px;display:inline-block}
+.plat-card{margin-bottom:15px;text-align:left}
+.platform-btn{width:100%;padding:14px;background:linear-gradient(135deg,#2d5016,#4a7c2e);color:#fff;border:none;border-radius:12px;cursor:pointer;font-family:inherit;text-align:left;font-weight:600}
+.platform-btn small{display:block;font-size:12px;opacity:0.8;margin-top:4px;font-weight:400}
+.platform-btn.done{background:#4a7c2e}.platform-btn.already{background:#888}
+.res-box{background:rgba(74,124,46,0.08);padding:10px;border-radius:0 0 12px 12px;margin-top:-5px}
+.res-inputs{display:flex;gap:5px;align-items:center;margin:8px 0}
+.res-inputs input,.edu-block select{padding:8px;border-radius:8px;border:2px solid #4a7c2e;font-family:inherit}
+.result-btn{width:100%;padding:8px;background:#654321;color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;margin-top:5px}
+.edu-block{margin-top:20px;padding-top:20px;border-top:2px dashed rgba(74,124,46,0.3)}
+.edu-label{color:#1a4d2e;font-weight:bold;margin-bottom:8px;text-align:left}
+#pwd-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a4d2e,#2d5016);display:flex;justify-content:center;align-items:center;z-index:999}
+.pwd-box{background:#fff;padding:30px;border-radius:24px;max-width:350px;width:90%;text-align:center}
+.pwd-box input{width:100%;padding:12px;margin:15px 0;border:2px solid #4a7c2e;border-radius:10px;text-align:center;font-size:18px}
+.pwd-box button{width:100%;padding:12px;background:#2d5016;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
+.err{color:red;font-size:13px;display:none}
+#main{display:none}
+</style>
+</head>
+<body>
+<div id="pwd-screen"><div class="pwd-box">
+<h2>🔐 Карточка организатора</h2>
+<input type="password" id="pwd-in" placeholder="Пароль" onkeypress="if(event.key==='Enter')chkPwd()">
+<button onclick="chkPwd()">Войти</button>
+<p class="err" id="pwd-err">❌ Неверный пароль!</p>
+</div></div>
+
+<div id="main"><div class="card">
+<div class="avatar">П</div>
+<h2>Пиневский Николай Иосифович</h2>
+<div class="id">ID: ПиневскийНИ_Семейка</div>
+
+
+    <div class="edu-block">
+        <div class="edu-label">🎓 Образовательные площадки</div>
+        <select id="speaker-select" style="width:100%;padding:10px;border-radius:8px;border:2px solid #4a7c2e;margin-bottom:8px;font-family:inherit;">
+            <option value="">Выберите спикера...</option>
+            <option value="Ирина Грабельникова "НейроАтом: Энергия Жизни"">Ирина Грабельникова </option><option value="Инна Кононенко "Маяки добра"">Инна Кононенко </option><option value="Софья Няч "Сказки как путь взросления"">Софья Няч </option><option value="Анастасия Бабичева "Личная стратегическая сессия волонтёра"">Анастасия Бабичева </option><option value="Анастасия Родионова "Традиция как тренд"">Анастасия Родионова </option><option value="Валерий Дубиков "Нейросети - твой помощник"">Валерий Дубиков </option><option value="Илона Дилбарян "Лидерами не рождаются - ими становятся"">Илона Дилбарян </option><option value="Елизавета Денисова и Кристина Агапова "Успешные земляки"">Елизавета Денисова и Кристина Агапова </option><option value="Андрей Болдырев "Надёжная оборона. Отражаем атаки мошенников"">Андрей Болдырев </option><option value="Татьяна Шевяхова "Быт и традиции народов севера"">Татьяна Шевяхова </option><option value="Анна Климова "Успешные земляки"">Анна Климова </option><option value="Герман Бардин "Ямал: путь от традиционности к многонациональности"">Герман Бардин </option><option value="Ангелина Юрепина "Семья и семейные традиции"">Ангелина Юрепина </option><option value="Оксана Орлова-Горская "Личная экосистема. Как подобрать лучшие эко-привычки"">Оксана Орлова-Горская </option><option value="Сергей Музыкантов "Цифровая безопасность"">Сергей Музыкантов </option>
+        </select>
+        <button class="result-btn" onclick="markSpeaker()" style="width:100%">✅ Отметить посещение</button>
+        <div id="edu-status" style="margin-top:8px;font-size:13px;color:#1a4d2e;font-weight:600;"></div>
+    </div>
+    
+</div></div>
+
+<script>
+var FIO="Пиневский Николай Иосифович",TEAM="Семейка",PLATS=[],PWD="ЯГЕЛЬ2026",URL='https://script.google.com/macros/s/AKfycbxPcHg5bodDT85XCP1MR36v2O0HK8LRBJTqbXH3qNHolfTUNaVA-6EvYdfJXQ22sR9K/exec';
+
+function chkPwd(){
+    if(document.getElementById('pwd-in').value===PWD){
+        document.getElementById('pwd-screen').style.display='none';
+        document.getElementById('main').style.display='block';
+        checkAll();
+    }else{
+        var e=document.getElementById('pwd-err');e.style.display='block';
+        setTimeout(()=>e.style.display='none',3000);
+    }
+}
+
+function api(act,extra=''){
+    return fetch(URL+'?action='+act+'&fio='+encodeURIComponent(FIO)+'&team='+encodeURIComponent(TEAM)+extra)
+    .then(r=>r.json());
+}
+
+function checkAll(){
+    PLATS.forEach((_,i)=>api('check','&platform='+encodeURIComponent(PLATS[i])).then(d=>{
+        if(d.alreadyMarked){
+            var b=document.getElementById('btn-'+i);b.classList.add('already','done');b.disabled=true;
+            document.getElementById('st-'+i).innerText='✅ '+d.statusValue;
+        }
+        if(d.result){
+            document.getElementById('res-'+i).innerHTML='<div style="color:#1a4d2e;font-weight:bold">✅ '+d.result+'</div><small style="color:#888">Изменить в таблице</small>';
+        }
+    }));
+}
+
+function markPlat(i,btn){
+    if(btn.disabled)return;
+    btn.disabled=true;document.getElementById('st-'+i).innerText='⏳...';
+    api('mark','&platform='+encodeURIComponent(PLATS[i])).then(d=>{
+        if(d.success&&!d.alreadyMarked){btn.classList.add('done');document.getElementById('st-'+i).innerText='✅ Отмечено';}
+        else if(d.alreadyMarked){btn.classList.add('already','done');document.getElementById('st-'+i).innerText='✅ '+d.statusValue;}
+        else{btn.disabled=false;document.getElementById('st-'+i).innerText='❌ '+d.message;}
+    });
+}
+
+function saveRes(i){
+    var p=PLATS[i],isTime=p.includes('Гонка');
+    var res=isTime?(document.getElementById('min-'+i).value+' мин '+document.getElementById('sec-'+i).value+' сек'):document.getElementById('place-'+i).value;
+    if(isTime&&(!document.getElementById('min-'+i).value||!document.getElementById('sec-'+i).value)){alert('Заполни оба поля!');return;}
+
+    var box=document.getElementById('res-'+i);
+    box.innerHTML='⏳ Сохранение...';
+    api('save_result','&platform='+encodeURIComponent(p)+'&result='+encodeURIComponent(res)).then(d=>{
+        if(d.success) box.innerHTML='<div style="color:#1a4d2e;font-weight:bold">✅ '+res+'</div><small style="color:#888">Изменить в таблице</small>';
+        else{box.innerHTML='<button class="result-btn" onclick="saveRes('+i+')">💾 Повторить</button>';alert(d.message);}
+    });
+}
+
+function markSpeaker(){
+    var sel=document.getElementById('speaker-select');
+    if(!sel.value)return alert('Выберите спикера!');
+    var spk='Спикер '+sel.value;
+    var st=document.getElementById('edu-status');
+    st.innerText='⏳ Отправка...';
+    api('mark','&platform='+encodeURIComponent(spk)).then(d=>{
+        if(d.success) st.innerHTML='✅ Посещено: '+sel.value.split('"')[0]+'<br><small>'+d.timestamp+'</small>';
+        else if(d.alreadyMarked) st.innerHTML='️ Эта лекция уже отмечена!<br><small>'+d.statusValue+'</small>';
+        else st.innerText='❌ '+d.message;
+    });
+}
+</script>
+</body>
+</html>
